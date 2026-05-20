@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ST 4035 - Binary Logistic Regression Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Interactive active state button styling */
+        .active-btn {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+            color: #ffffff !important;
+            border-color: #0284c7 !important;
+            box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen antialiased">
+
+    <header class="bg-[#1e3a8a] text-white px-8 py-5 shadow-md flex flex-col md:flex-row md:items-center md:justify-between border-b-4 border-[#0369a1]">
+        <div>
+            <h1 class="text-xl font-bold tracking-wide text-white">Binary Logistic Regression Interactive Dashboard</h1>
+            <p class="text-xs text-blue-200 mt-1 uppercase tracking-widest font-semibold">ST 4035 - Data Science | Individual Assignment</p>
+        </div>
+        <div class="mt-3 md:mt-0 bg-[#0369a1] px-4 py-2 rounded-xl text-xs font-bold text-white tracking-wide shadow-sm border border-blue-400/20">
+            STUDENT INDEX: <span class="text-amber-300 font-mono tracking-wider text-sm ml-1">s16770</span>
+        </div>
+    </header>
+
+    <main class="max-w-[1440px] mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <section class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 h-fit space-y-5 lg:sticky lg:top-6">
+            <div class="border-b border-slate-100 pb-2">
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-blue-950">Model Parameters</h2>
+                <p class="text-[11px] text-blue-900 mt-0.5">Adjust inputs to rebuild graphics live</p>
+            </div>
+
+            <div>
+                <button id="resetBtn" class="w-full bg-slate-100 text-blue-950 border border-slate-300 font-bold text-xs py-2 rounded-xl hover:bg-slate-200 cursor-pointer transition-all">
+                    Reset to Default Baseline
+                </button>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-blue-950">Sample Size</label>
+                    <span class="bg-blue-50 text-blue-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+                        n = <span id="sampleSizeVal">750</span>
+                    </span>
+                </div>
+                <input type="range" id="sampleSize" min="100" max="2000" step="50" value="750" 
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1e3a8a]">
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-blue-950">Minority Ratio</label>
+                    <span class="bg-blue-50 text-blue-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+                        p = <span id="imbalanceVal">20%</span>
+                    </span>
+                </div>
+                <input type="range" id="imbalance" min="5" max="50" step="5" value="20" 
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1e3a8a]">
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-blue-950">Balancing Method</label>
+                <div class="grid grid-cols-1 gap-1.5" id="balancingGroup">
+                    <button data-value="None" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">None</button>
+                    <button data-value="Oversampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Oversampling</button>
+                    <button data-value="Undersampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Undersampling</button>
+                    <button data-value="SMOTE" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">SMOTE</button>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-blue-950">Link Function</label>
+                <div class="grid grid-cols-1 gap-1.5" id="linkGroup">
+                    <button data-value="Logit" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Logit</button>
+                    <button data-value="Probit" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Probit</button>
+                    <button data-value="Cloglog" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Clog-log</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="lg:col-span-9 space-y-6">
+            
+            <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-blue-950 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-blue-950 uppercase font-extrabold tracking-wider">Total Samples</p>
+                    <p id="metricTotal" class="text-2xl font-bold text-slate-800 mt-1.5">750</p>
+                </div>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-cyan-600 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-cyan-800 uppercase font-extrabold tracking-wider">Class 1 Count</p>
+                    <p id="metricClass1" class="text-2xl font-bold text-cyan-600 mt-1.5">150</p>
+                </div>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-amber-700 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-amber-800 uppercase font-extrabold tracking-wider">Class 0 Count</p>
+                    <p id="metricClass0" class="text-2xl font-bold text-amber-700 mt-1.5">600</p>
+                </div>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-indigo-600 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-indigo-800 uppercase font-extrabold tracking-wider">Imbalance Ratio</p>
+                    <p id="metricRatio" class="text-2xl font-bold text-slate-800 mt-1.5">1 : 4.0</p>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Class Distribution Before & After Balancing</h3>
+                    <div class="relative w-full h-[calc(100%-2rem)]">
+                        <canvas id="chartDistribution"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Fitted Probability Curves</h3>
+                    <div class="relative w-full h-[calc(100%-2rem)]">
+                        <canvas id="chartCurves"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Model Operating Characteristics (ROC Curve)</h3>
+                    <div class="relative w-full h-[calc(100%-2rem)]">
+                        <canvas id="chartROC"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Confusion Matrix (Normalized Scale Rates)</h3>
+                    <div class="relative w-full h-[calc(100%-2rem)]">
+                        <canvas id="chartConfusion"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="bg-blue-50 text-blue-950 rounded-2xl p-5 shadow-sm border border-blue-200 text-xs grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center font-semibold">
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Active Link: <span id="footLink" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">Logit</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Active Balancing: <span id="footBalancing" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">None</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Area Under Curve (AUC): <span id="footAUC" class="font-bold text-indigo-700 block mt-1 text-sm tracking-wide">0.720</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Accuracy Rate: <span id="footAccuracy" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">81.5%</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Sensitivity (TPR): <span id="footSens" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">62.0%</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Specificity (TNR): <span id="footSpec" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">85.4%</span></div>
+            </footer>
+
+        </div>
+    </main>
+
+    <script>
+        let currentMethod = 'None';
+        let currentLink = 'Logit';
+        let distChart, curvesChart, rocChart, confChart;
+
+        // Probit structural integral mathematical approximation loop
+        function normalCDF(x) {
+            const t = 1 / (1 + 0.2316419 * Math.abs(x));
+            const d = 0.3989423 * Math.exp(-x * x / 2);
+            let p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+            return x > 0 ? 1 - p : p;
+        }
+
+        function updateDashboard() {
+            const n = parseInt(document.getElementById('sampleSize').value);
+            const p = parseInt(document.getElementById('imbalance').value);
+            
+            document.getElementById('sampleSizeVal').innerText = n;
+            document.getElementById('imbalanceVal').innerText = p + '%';
+
+            const origMinority = Math.round(n * (p / 100));
+            const origMajority = n - origMinority;
+
+            let finalMinority = origMinority;
+            let finalMajority = origMajority;
+
+            if (currentMethod === 'Oversampling') {
+                finalMinority = origMajority; 
+            } else if (currentMethod === 'Undersampling') {
+                finalMajority = origMinority;
+            } else if (currentMethod === 'SMOTE') {
+                finalMinority = Math.round(origMajority * 0.85); 
+            }
+
+            const totalSamplesCalculated = finalMinority + finalMajority;
+            const ratioCalc = (finalMajority / finalMinority).toFixed(1);
+
+            document.getElementById('metricTotal').innerText = totalSamplesCalculated;
+            document.getElementById('metricClass1').innerText = finalMinority;
+            document.getElementById('metricClass0').innerText = finalMajority;
+            document.getElementById('metricRatio').innerText = `1 : ${ratioCalc}`;
+
+            let qualityFactor = 0.5; 
+            if (currentMethod === 'SMOTE') qualityFactor = 0.82;
+            else if (currentMethod === 'Oversampling') qualityFactor = 0.76;
+            else if (currentMethod === 'Undersampling') qualityFactor = 0.70;
+            else qualityFactor = 0.55 + (p / 200);
+
+            const auc = Math.min(0.98, Math.max(0.50, qualityFactor + 0.05 * (currentLink === 'Logit' ? 2 : 1))).toFixed(3);
+            const sensitivity = Math.min(0.95, qualityFactor - 0.02).toFixed(3);
+            const specificity = Math.min(0.97, (0.4 + (finalMajority / totalSamplesCalculated) * 0.5)).toFixed(3);
+            const accuracy = ((parseFloat(sensitivity) * finalMinority + parseFloat(specificity) * finalMajority) / totalSamplesCalculated).toFixed(3);
+
+            document.getElementById('footLink').innerText = currentLink;
+            document.getElementById('footBalancing').innerText = currentMethod;
+            document.getElementById('footAUC').innerText = auc;
+            document.getElementById('footAccuracy').innerText = (accuracy * 100).toFixed(1) + '%';
+            document.getElementById('footSens').innerText = (sensitivity * 100).toFixed(1) + '%';
+            document.getElementById('footSpec').innerText = (specificity * 100).toFixed(1) + '%';
+
+            //Chart 1 Refreshes
+            distChart.data.datasets[0].data = [origMinority, finalMinority];
+            distChart.data.datasets[1].data = [origMajority, finalMajority];
+            distChart.update();
+
+            //Chart 2 Highlights
+            curvesChart.data.datasets.forEach(dataset => {
+                if (dataset.label === currentLink || (currentLink === 'Cloglog' && dataset.label === 'Complementary log-log')) {
+                    dataset.borderWidth = 5.0; 
+                } else {
+                    dataset.borderWidth = 2.0;
+                }
+            });
+            curvesChart.update();
+
+            //Chart 3 Plot Lines
+            const rocPoints = [];
+            for (let i = 0; i <= 10; i++) {
+                let fpr = i / 10;
+                let tpr = Math.min(1, Math.pow(fpr, 1 - auc) * parseFloat(sensitivity));
+                if (i === 10) tpr = 1;
+                rocPoints.push({x: fpr, y: tpr});
+            }
+            rocChart.data.datasets[0].data = rocPoints;
+            rocChart.update();
+
+            //Chart 4 Matrix Scaling
+            const tp = parseFloat(sensitivity);
+            const fn = 1 - tp;
+            const tn = parseFloat(specificity);
+            const fp = 1 - tn;
+            confChart.data.datasets[0].data = [tn, fp, fn, tp];
+            confChart.update();
+        }
+
+        function initCharts() {
+            const ctx1 = document.getElementById('chartDistribution').getContext('2d');
+            distChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Before (Original)', 'After (Selected Method)'],
+                    datasets: [
+                        { label: 'Class 1 (Minority Class)', data: [0, 0], backgroundColor: '#0891b2', borderRadius: 5 }, 
+                        { label: 'Class 0 (Majority Class)', data: [0, 0], backgroundColor: '#b45309', borderRadius: 5 }  
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: '#1e3a8a', font: { weight: 'bold' } }, title: { display: true, text: 'Sampling Framework State', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } },
+                        y: { border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Observed Frequency Count', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('chartCurves').getContext('2d');
+            const etaValues = []; const logitData = []; const probitData = []; const cloglogData = [];
+            for (let eta = -4; eta <= 4; eta += 0.4) {
+                etaValues.push(eta.toFixed(1));
+                logitData.push(1 / (1 + Math.exp(-eta)));
+                probitData.push(normalCDF(eta));
+                cloglogData.push(1 - Math.exp(-Math.exp(eta)));
+            }
+
+            curvesChart = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: etaValues,
+                    datasets: [
+                        { label: 'Logit', data: logitData, borderColor: '#b45309', fill: false, borderDash: [], pointRadius: 0 }, 
+                        { label: 'Probit', data: probitData, borderColor: '#0891b2', fill: false, borderDash: [6, 4], pointRadius: 0 }, 
+                        { label: 'Complementary log-log', data: cloglogData, borderColor: '#4f46e5', fill: false, borderDash: [2, 2], pointRadius: 0 }
+                    ]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { boxWidth: 20, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    scales: { 
+                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Predicted Probability P(Y=1 | eta)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } }, 
+                        x: { grid: { display: false }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Linear Predictor (eta Matrix Values)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } } 
+                    }
+                }
+            });
+
+            const ctx3 = document.getElementById('chartROC').getContext('2d');
+            rocChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    datasets: [
+                        { label: 'Model ROC Pathway Performance', data: [], borderColor: '#0891b2', fill: false, borderWidth: 3.5, pointRadius: 1 },
+                        { label: 'Random Guessing Baseline (AUC = 0.5)', data: [{x:0, y:0}, {x:1, y:1}], borderColor: '#cbd5e1', borderDash: [4, 4], fill: false, pointRadius: 0 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { boxWidth: 15, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    scales: {
+                        x: { type: 'linear', position: 'bottom', ticks: { color: '#1e3a8a' }, title: { display: true, text: 'False Positive Rate (1 - Specificity)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 },
+                        y: { border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'True Positive Rate (Sensitivity)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 }
+                    }
+                }
+            });
+
+            const ctx4 = document.getElementById('chartConfusion').getContext('2d');
+            confChart = new Chart(ctx4, {
+                type: 'bar',
+                data: {
+                    labels: ['True Negative (0,0)', 'False Positive (0,1)', 'False Negative (1,0)', 'True Positive (1,1)'],
+                    datasets: [{
+                        label: 'Proportional Scaling Matrix Rate',
+                        data: [0, 0, 0, 0],
+                        backgroundColor: ['#b45309', '#f43f5e', '#fee2e2', '#0891b2'], 
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        x: { grid: { display: false }, ticks: { color: '#1e3a8a', font: { weight: 'bold', size: 10 } }, title: { display: true, text: 'Evaluated Target Outcome Category', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } },
+                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Normalized Decimal Scale Proportion [0 - 1]', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } } 
+                    }
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            initCharts();
+
+            //Reset Button Listener
+            document.getElementById('resetBtn').addEventListener('click', () => {
+                document.getElementById('sampleSize').value = 750;
+                document.getElementById('imbalance').value = 20;
+                currentMethod = 'None';
+                currentLink = 'Logit';
+                document.querySelectorAll('#balancingGroup button, #linkGroup button').forEach(b => b.classList.remove('active-btn'));
+                document.querySelector('#balancingGroup button[data-value="None"]').classList.add('active-btn');
+                document.querySelector('#linkGroup button[data-value="Logit"]').classList.add('active-btn');
+                updateDashboard();
+            });
+
+            document.getElementById('sampleSize').addEventListener('input', updateDashboard);
+            document.getElementById('imbalance').addEventListener('input', updateDashboard);
+
+            document.getElementById('balancingGroup').addEventListener('click', (e) => {
+                if(e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('#balancingGroup button').forEach(b => b.classList.remove('active-btn'));
+                    e.target.classList.add('active-btn');
+                    currentMethod = e.target.getAttribute('data-value');
+                    updateDashboard();
+                }
+            });
+
+            document.getElementById('linkGroup').addEventListener('click', (e) => {
+                if(e.target.tagName === 'BUTTON') {
+                    document.querySelectorAll('#linkGroup button').forEach(b => b.classList.remove('active-btn'));
+                    e.target.classList.add('active-btn');
+                    currentLink = e.target.getAttribute('data-value');
+                    updateDashboard();
+                }
+            });
+
+            updateDashboard();
+        });
+    </script>
+</body>
+</html>
