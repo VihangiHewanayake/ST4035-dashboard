@@ -201,7 +201,7 @@
             document.getElementById('metricClass0').innerText = finalMajority;
             document.getElementById('metricRatio').innerText = `1 : ${ratioCalc}`;
 
-            //Real time calculations updating the custom status allocation bar widths
+            // Real-time calculations updating the custom status allocation bar widths
             const minorityPercentage = (finalMinority / totalSamplesCalculated) * 100;
             const majorityPercentage = (finalMajority / totalSamplesCalculated) * 100;
             document.getElementById('statusBarMinority').style.width = minorityPercentage + '%';
@@ -225,7 +225,7 @@
             document.getElementById('footSens').innerText = (sensitivity * 100).toFixed(1) + '%';
             document.getElementById('footSpec').innerText = (specificity * 100).toFixed(1) + '%';
 
-            //Chart 1 
+            //Chart 1
             distChart.data.datasets[0].data = [origMinority, finalMinority];
             distChart.data.datasets[1].data = [origMajority, finalMajority];
             distChart.update();
@@ -251,7 +251,7 @@
             rocChart.data.datasets[0].data = rocPoints;
             rocChart.update();
 
-            //Chart 4 matrix scaling with colors
+            //Chart 4 Matrix
             const tp = parseFloat(sensitivity);
             const fn = 1 - tp;
             const tn = parseFloat(specificity);
@@ -340,7 +340,7 @@
                     datasets: [{
                         label: 'Proportional Scaling Matrix Rate',
                         data: [0, 0, 0, 0],
-                        backgroundColor: ['#1e3a8a', '#f43f5e', '#f1f5f9', '#14b8a6'], 
+                        backgroundColor: ['#1e3a8a', '#f43f5e', '#cbd5e1', '#14b8a6'], 
                         borderRadius: 5
                     }]
                 },
