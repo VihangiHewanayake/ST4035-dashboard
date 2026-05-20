@@ -7,24 +7,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Interactive active state button styling */
+        /* Interactive active state button styling using Deep Emerald Green */
         .active-btn {
-            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
+            background: linear-gradient(135deg, #0f766e 0%, #115e59 100%) !important;
             color: #ffffff !important;
-            border-color: #0284c7 !important;
-            box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
+            border-color: #0f766e !important;
+            box-shadow: 0 4px 12px rgba(17, 94, 89, 0.3);
             transform: translateY(-1px);
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans min-h-screen antialiased">
 
-    <header class="bg-[#1e3a8a] text-white px-8 py-5 shadow-md flex flex-col md:flex-row md:items-center md:justify-between border-b-4 border-[#0369a1]">
+    <header class="bg-[#115e59] text-white px-8 py-5 shadow-md flex flex-col md:flex-row md:items-center md:justify-between border-b-4 border-[#0f766e]">
         <div>
             <h1 class="text-xl font-bold tracking-wide text-white">Binary Logistic Regression Interactive Dashboard</h1>
-            <p class="text-xs text-blue-200 mt-1 uppercase tracking-widest font-semibold">ST 4035 - Data Science | Individual Assignment</p>
+            <p class="text-xs text-teal-100 mt-1 uppercase tracking-widest font-semibold">ST 4035 - Data Science | Individual Assignment</p>
         </div>
-        <div class="mt-3 md:mt-0 bg-[#0369a1] px-4 py-2 rounded-xl text-xs font-bold text-white tracking-wide shadow-sm border border-blue-400/20">
+        <div class="mt-3 md:mt-0 bg-[#0f766e] px-4 py-2 rounded-xl text-xs font-bold text-white tracking-wide shadow-sm border border-teal-400/20">
             STUDENT INDEX: <span class="text-amber-300 font-mono tracking-wider text-sm ml-1">s16770</span>
         </div>
     </header>
@@ -33,54 +33,66 @@
         
         <section class="lg:col-span-3 bg-white p-6 rounded-2xl shadow-md border border-slate-200/80 h-fit space-y-5 lg:sticky lg:top-6">
             <div class="border-b border-slate-100 pb-2">
-                <h2 class="text-xs font-extrabold uppercase tracking-widest text-blue-950">Model Parameters</h2>
-                <p class="text-[11px] text-blue-900 mt-0.5">Adjust inputs to rebuild graphics live</p>
+                <h2 class="text-xs font-extrabold uppercase tracking-widest text-teal-950">Model Parameters</h2>
+                <p class="text-[11px] text-teal-900 mt-0.5">Adjust inputs to rebuild graphics live</p>
             </div>
 
             <div>
-                <button id="resetBtn" class="w-full bg-slate-100 text-blue-950 border border-slate-300 font-bold text-xs py-2 rounded-xl hover:bg-slate-200 cursor-pointer transition-all">
+                <button id="resetBtn" class="w-full bg-slate-100 text-teal-950 border border-slate-300 font-bold text-xs py-2 rounded-xl hover:bg-slate-200 cursor-pointer transition-all">
                     Reset to Default Baseline
                 </button>
             </div>
 
             <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-extrabold uppercase tracking-wider text-blue-950">Sample Size</label>
-                    <span class="bg-blue-50 text-blue-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-teal-950">Sample Size</label>
+                    <span class="bg-teal-50 text-teal-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-teal-200">
                         n = <span id="sampleSizeVal">750</span>
                     </span>
                 </div>
                 <input type="range" id="sampleSize" min="100" max="2000" step="50" value="750" 
-                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1e3a8a]">
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#115e59]">
             </div>
 
             <div class="space-y-2">
                 <div class="flex items-center justify-between">
-                    <label class="text-xs font-extrabold uppercase tracking-wider text-blue-950">Minority Ratio</label>
-                    <span class="bg-blue-50 text-blue-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-blue-200">
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-teal-950">Minority Ratio</label>
+                    <span class="bg-teal-50 text-teal-950 font-mono text-xs font-bold px-2.5 py-1 rounded-lg border border-teal-200">
                         p = <span id="imbalanceVal">20%</span>
                     </span>
                 </div>
                 <input type="range" id="imbalance" min="5" max="50" step="5" value="20" 
-                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#1e3a8a]">
+                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#115e59]">
             </div>
 
-            <div class="space-y-2">
-                <label class="block text-xs font-extrabold uppercase tracking-wider text-blue-950">Balancing Method</label>
-                <div class="grid grid-cols-1 gap-1.5" id="balancingGroup">
-                    <button data-value="None" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">None</button>
-                    <button data-value="Oversampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Oversampling</button>
-                    <button data-value="Undersampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Undersampling</button>
-                    <button data-value="SMOTE" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">SMOTE</button>
+            <div class="space-y-2 pt-1">
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-teal-950">Sample Allocation Composition</label>
+                <div class="w-full h-4 bg-slate-100 rounded-lg flex overflow-hidden border border-slate-200">
+                    <div id="statusBarMinority" class="bg-[#14b8a6] transition-all duration-300 h-full" style="width: 20%;"></div>
+                    <div id="statusBarMajority" class="bg-[#1e3a8a] transition-all duration-300 h-full" style="width: 80%;"></div>
+                </div>
+                <div class="flex justify-between text-[10px] font-bold text-slate-500 px-0.5">
+                    <span class="text-[#14b8a6]">● Class 1</span>
+                    <span class="text-[#1e3a8a]">● Class 0</span>
                 </div>
             </div>
 
             <div class="space-y-2">
-                <label class="block text-xs font-extrabold uppercase tracking-wider text-blue-950">Link Function</label>
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-teal-950">Balancing Method</label>
+                <div class="grid grid-cols-1 gap-1.5" id="balancingGroup">
+                    <button data-value="None" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">None</button>
+                    <button data-value="Oversampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">Oversampling</button>
+                    <button data-value="Undersampling" class="w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">Undersampling</button>
+                    <button data-value="SMOTE" class="w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">SMOTE</button>
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-extrabold uppercase tracking-wider text-teal-950">Link Function</label>
                 <div class="grid grid-cols-1 gap-1.5" id="linkGroup">
-                    <button data-value="Logit" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Logit</button>
-                    <button data-value="Probit" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Probit</button>
-                    <button data-value="Cloglog" class="w-full text-left px-3 py-2 text-xs font-bold border border-blue-100 rounded-xl hover:bg-blue-50/50 transition-all cursor-pointer text-blue-950">Clog-log</button>
+                    <button data-value="Logit" class="active-btn w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">Logit</button>
+                    <button data-value="Probit" class="w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">Probit</button>
+                    <button data-value="Cloglog" class="w-full text-left px-3 py-2 text-xs font-bold border border-teal-100 rounded-xl hover:bg-teal-50/50 transition-all cursor-pointer text-teal-950">Clog-log</button>
                 </div>
             </div>
         </section>
@@ -88,61 +100,61 @@
         <div class="lg:col-span-9 space-y-6">
             
             <section class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-blue-950 hover:shadow-md transition-shadow">
-                    <p class="text-[11px] text-blue-950 uppercase font-extrabold tracking-wider">Total Samples</p>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-blue-900 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-slate-700 uppercase font-extrabold tracking-wider">Total Samples</p>
                     <p id="metricTotal" class="text-2xl font-bold text-slate-800 mt-1.5">750</p>
                 </div>
-                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-cyan-600 hover:shadow-md transition-shadow">
-                    <p class="text-[11px] text-cyan-800 uppercase font-extrabold tracking-wider">Class 1 Count</p>
-                    <p id="metricClass1" class="text-2xl font-bold text-cyan-600 mt-1.5">150</p>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-teal-600 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-teal-800 uppercase font-extrabold tracking-wider">Class 1 Count</p>
+                    <p id="metricClass1" class="text-2xl font-bold text-teal-600 mt-1.5">150</p>
                 </div>
-                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-amber-700 hover:shadow-md transition-shadow">
-                    <p class="text-[11px] text-amber-800 uppercase font-extrabold tracking-wider">Class 0 Count</p>
-                    <p id="metricClass0" class="text-2xl font-bold text-amber-700 mt-1.5">600</p>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-blue-700 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-slate-500 uppercase font-extrabold tracking-wider">Class 0 Count</p>
+                    <p id="metricClass0" class="text-2xl font-bold text-blue-900 mt-1.5">600</p>
                 </div>
-                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-indigo-600 hover:shadow-md transition-shadow">
-                    <p class="text-[11px] text-indigo-800 uppercase font-extrabold tracking-wider">Imbalance Ratio</p>
+                <div class="bg-white p-4.5 rounded-2xl shadow-sm border border-slate-200/60 border-l-4 border-l-teal-700 hover:shadow-md transition-shadow">
+                    <p class="text-[11px] text-teal-900 uppercase font-extrabold tracking-wider">Imbalance Ratio</p>
                     <p id="metricRatio" class="text-2xl font-bold text-slate-800 mt-1.5">1 : 4.0</p>
                 </div>
             </section>
 
             <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Class Distribution Before & After Balancing</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-950 mb-3 text-center">Class Distribution Before & After Balancing</h3>
                     <div class="relative w-full h-[calc(100%-2rem)]">
                         <canvas id="chartDistribution"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Fitted Probability Curves</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-950 mb-3 text-center">Fitted Probability Curves</h3>
                     <div class="relative w-full h-[calc(100%-2rem)]">
                         <canvas id="chartCurves"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Model Operating Characteristics (ROC Curve)</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-950 mb-3 text-center">Model Operating Characteristics (ROC Curve)</h3>
                     <div class="relative w-full h-[calc(100%-2rem)]">
                         <canvas id="chartROC"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200/80 h-84 hover:shadow-md transition-shadow">
-                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-blue-950 mb-3 text-center">Confusion Matrix (Normalized Scale Rates)</h3>
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-teal-950 mb-3 text-center">Confusion Matrix (Normalized Scale Rates)</h3>
                     <div class="relative w-full h-[calc(100%-2rem)]">
                         <canvas id="chartConfusion"></canvas>
                     </div>
                 </div>
             </section>
 
-            <footer class="bg-blue-50 text-blue-950 rounded-2xl p-5 shadow-sm border border-blue-200 text-xs grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center font-semibold">
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Active Link: <span id="footLink" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">Logit</span></div>
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Active Balancing: <span id="footBalancing" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">None</span></div>
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Area Under Curve (AUC): <span id="footAUC" class="font-bold text-indigo-700 block mt-1 text-sm tracking-wide">0.720</span></div>
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Accuracy Rate: <span id="footAccuracy" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">81.5%</span></div>
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Sensitivity (TPR): <span id="footSens" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">62.0%</span></div>
-                <div class="bg-white p-2.5 rounded-xl border border-blue-200/80 shadow-xs text-blue-950">Specificity (TNR): <span id="footSpec" class="font-bold text-cyan-700 block mt-1 text-sm tracking-wide">85.4%</span></div>
+            <footer class="bg-teal-50 text-teal-950 rounded-2xl p-5 shadow-sm border border-teal-200 text-xs grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 text-center font-semibold">
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Active Link: <span id="footLink" class="font-bold text-teal-700 block mt-1 text-sm tracking-wide">Logit</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Active Balancing: <span id="footBalancing" class="font-bold text-teal-700 block mt-1 text-sm tracking-wide">None</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Area Under Curve (AUC): <span id="footAUC" class="font-bold text-[#115e59] block mt-1 text-sm tracking-wide">0.720</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Accuracy Rate: <span id="footAccuracy" class="font-bold text-teal-700 block mt-1 text-sm tracking-wide">81.5%</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Sensitivity (TPR): <span id="footSens" class="font-bold text-teal-700 block mt-1 text-sm tracking-wide">62.0%</span></div>
+                <div class="bg-white p-2.5 rounded-xl border border-teal-200/80 shadow-xs text-teal-950">Specificity (TNR): <span id="footSpec" class="font-bold text-teal-700 block mt-1 text-sm tracking-wide">85.4%</span></div>
             </footer>
 
         </div>
@@ -153,7 +165,6 @@
         let currentLink = 'Logit';
         let distChart, curvesChart, rocChart, confChart;
 
-        // Probit structural integral mathematical approximation loop
         function normalCDF(x) {
             const t = 1 / (1 + 0.2316419 * Math.abs(x));
             const d = 0.3989423 * Math.exp(-x * x / 2);
@@ -190,6 +201,12 @@
             document.getElementById('metricClass0').innerText = finalMajority;
             document.getElementById('metricRatio').innerText = `1 : ${ratioCalc}`;
 
+            //Real time calculations updating the custom status allocation bar widths
+            const minorityPercentage = (finalMinority / totalSamplesCalculated) * 100;
+            const majorityPercentage = (finalMajority / totalSamplesCalculated) * 100;
+            document.getElementById('statusBarMinority').style.width = minorityPercentage + '%';
+            document.getElementById('statusBarMajority').style.width = majorityPercentage + '%';
+
             let qualityFactor = 0.5; 
             if (currentMethod === 'SMOTE') qualityFactor = 0.82;
             else if (currentMethod === 'Oversampling') qualityFactor = 0.76;
@@ -208,12 +225,12 @@
             document.getElementById('footSens').innerText = (sensitivity * 100).toFixed(1) + '%';
             document.getElementById('footSpec').innerText = (specificity * 100).toFixed(1) + '%';
 
-            //Chart 1 Refreshes
+            //Chart 1 
             distChart.data.datasets[0].data = [origMinority, finalMinority];
             distChart.data.datasets[1].data = [origMajority, finalMajority];
             distChart.update();
 
-            //Chart 2 Highlights
+            //Chart 2 highlights
             curvesChart.data.datasets.forEach(dataset => {
                 if (dataset.label === currentLink || (currentLink === 'Cloglog' && dataset.label === 'Complementary log-log')) {
                     dataset.borderWidth = 5.0; 
@@ -223,7 +240,7 @@
             });
             curvesChart.update();
 
-            //Chart 3 Plot Lines
+            //Chart 3 plot lines
             const rocPoints = [];
             for (let i = 0; i <= 10; i++) {
                 let fpr = i / 10;
@@ -234,7 +251,7 @@
             rocChart.data.datasets[0].data = rocPoints;
             rocChart.update();
 
-            //Chart 4 Matrix Scaling
+            //Chart 4 matrix scaling with colors
             const tp = parseFloat(sensitivity);
             const fn = 1 - tp;
             const tn = parseFloat(specificity);
@@ -250,17 +267,17 @@
                 data: {
                     labels: ['Before (Original)', 'After (Selected Method)'],
                     datasets: [
-                        { label: 'Class 1 (Minority Class)', data: [0, 0], backgroundColor: '#0891b2', borderRadius: 5 }, 
-                        { label: 'Class 0 (Majority Class)', data: [0, 0], backgroundColor: '#b45309', borderRadius: 5 }  
+                        { label: 'Class 1 (Minority Class)', data: [0, 0], backgroundColor: '#14b8a6', borderRadius: 5 }, 
+                        { label: 'Class 0 (Majority Class)', data: [0, 0], backgroundColor: '#1e3a8a', borderRadius: 5 }  
                     ]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    plugins: { legend: { position: 'top', labels: { boxWidth: 12, color: '#115e59', font: { size: 11, weight: 'bold' } } } },
                     scales: {
-                        x: { grid: { display: false }, ticks: { color: '#1e3a8a', font: { weight: 'bold' } }, title: { display: true, text: 'Sampling Framework State', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } },
-                        y: { border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Observed Frequency Count', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } }
+                        x: { grid: { display: false }, ticks: { color: '#115e59', font: { weight: 'bold' } }, title: { display: true, text: 'Sampling Framework State', color: '#115e59', font: { weight: 'bold', size: 11 } } },
+                        y: { border: { dash: [4,4] }, ticks: { color: '#115e59' }, title: { display: true, text: 'Observed Frequency Count', color: '#115e59', font: { weight: 'bold', size: 11 } } }
                     }
                 }
             });
@@ -279,18 +296,18 @@
                 data: {
                     labels: etaValues,
                     datasets: [
-                        { label: 'Logit', data: logitData, borderColor: '#b45309', fill: false, borderDash: [], pointRadius: 0 }, 
-                        { label: 'Probit', data: probitData, borderColor: '#0891b2', fill: false, borderDash: [6, 4], pointRadius: 0 }, 
-                        { label: 'Complementary log-log', data: cloglogData, borderColor: '#4f46e5', fill: false, borderDash: [2, 2], pointRadius: 0 }
+                        { label: 'Logit', data: logitData, borderColor: '#1e3a8a', fill: false, borderDash: [], pointRadius: 0 }, 
+                        { label: 'Probit', data: probitData, borderColor: '#14b8a6', fill: false, borderDash: [6, 4], pointRadius: 0 }, 
+                        { label: 'Complementary log-log', data: cloglogData, borderColor: '#0f766e', fill: false, borderDash: [2, 2], pointRadius: 0 }
                     ]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { boxWidth: 20, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    plugins: { legend: { labels: { boxWidth: 20, color: '#115e59', font: { size: 11, weight: 'bold' } } } },
                     scales: { 
-                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Predicted Probability P(Y=1 | eta)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } }, 
-                        x: { grid: { display: false }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Linear Predictor (eta Matrix Values)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } } 
+                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#115e59' }, title: { display: true, text: 'Predicted Probability P(Y=1 | eta)', color: '#115e59', font: { weight: 'bold', size: 11 } } }, 
+                        x: { grid: { display: false }, ticks: { color: '#115e59' }, title: { display: true, text: 'Linear Predictor (eta Matrix Values)', color: '#115e59', font: { weight: 'bold', size: 11 } } } 
                     }
                 }
             });
@@ -300,17 +317,17 @@
                 type: 'line',
                 data: {
                     datasets: [
-                        { label: 'Model ROC Pathway Performance', data: [], borderColor: '#0891b2', fill: false, borderWidth: 3.5, pointRadius: 1 },
+                        { label: 'Model ROC Pathway Performance', data: [], borderColor: '#14b8a6', fill: false, borderWidth: 3.5, pointRadius: 1 },
                         { label: 'Random Guessing Baseline (AUC = 0.5)', data: [{x:0, y:0}, {x:1, y:1}], borderColor: '#cbd5e1', borderDash: [4, 4], fill: false, pointRadius: 0 }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { labels: { boxWidth: 15, color: '#1e3a8a', font: { size: 11, weight: 'bold' } } } },
+                    plugins: { legend: { labels: { boxWidth: 15, color: '#115e59', font: { size: 11, weight: 'bold' } } } },
                     scales: {
-                        x: { type: 'linear', position: 'bottom', ticks: { color: '#1e3a8a' }, title: { display: true, text: 'False Positive Rate (1 - Specificity)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 },
-                        y: { border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'True Positive Rate (Sensitivity)', color: '#1e3a8a', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 }
+                        x: { type: 'linear', position: 'bottom', ticks: { color: '#115e59' }, title: { display: true, text: 'False Positive Rate (1 - Specificity)', color: '#115e59', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 },
+                        y: { border: { dash: [4,4] }, ticks: { color: '#115e59' }, title: { display: true, text: 'True Positive Rate (Sensitivity)', color: '#115e59', font: { weight: 'bold', size: 11 } }, min: 0, max: 1 }
                     }
                 }
             });
@@ -323,7 +340,7 @@
                     datasets: [{
                         label: 'Proportional Scaling Matrix Rate',
                         data: [0, 0, 0, 0],
-                        backgroundColor: ['#b45309', '#f43f5e', '#fee2e2', '#0891b2'], 
+                        backgroundColor: ['#1e3a8a', '#f43f5e', '#f1f5f9', '#14b8a6'], 
                         borderRadius: 5
                     }]
                 },
@@ -332,8 +349,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: { 
-                        x: { grid: { display: false }, ticks: { color: '#1e3a8a', font: { weight: 'bold', size: 10 } }, title: { display: true, text: 'Evaluated Target Outcome Category', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } },
-                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#1e3a8a' }, title: { display: true, text: 'Normalized Decimal Scale Proportion [0 - 1]', color: '#1e3a8a', font: { weight: 'bold', size: 11 } } } 
+                        x: { grid: { display: false }, ticks: { color: '#115e59', font: { weight: 'bold', size: 10 } }, title: { display: true, text: 'Evaluated Target Outcome Category', color: '#115e59', font: { weight: 'bold', size: 11 } } },
+                        y: { min: 0, max: 1, border: { dash: [4,4] }, ticks: { color: '#115e59' }, title: { display: true, text: 'Normalized Decimal Scale Proportion [0 - 1]', color: '#115e59', font: { weight: 'bold', size: 11 } } } 
                     }
                 }
             });
@@ -342,7 +359,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             initCharts();
 
-            //Reset Button Listener
             document.getElementById('resetBtn').addEventListener('click', () => {
                 document.getElementById('sampleSize').value = 750;
                 document.getElementById('imbalance').value = 20;
